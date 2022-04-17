@@ -39,6 +39,7 @@ val_path = './data/formatted_trainval/shanghaitech_part_A_patches_9/val'
 val_gt_path = './data/formatted_trainval/shanghaitech_part_A_patches_9/val_den'
 
 #training configuration
+# MARK parameters
 start_step = 0
 end_step = 2000
 lr = 0.00001
@@ -62,6 +63,7 @@ if rand_seed is not None:
 
 
 # load net
+# MARK initialization
 net = CrowdCounter()
 network.weights_normal_init(net, dev=0.01)
 net.cuda()
@@ -94,7 +96,7 @@ t.tic()
 
 data_loader = ImageDataLoader(train_path, train_gt_path, shuffle=True, gt_downsample=True, pre_load=True)
 data_loader_val = ImageDataLoader(val_path, val_gt_path, shuffle=False, gt_downsample=True, pre_load=True)
-best_mae = sys.maxint
+best_mae = sys.maxsize
 
 for epoch in range(start_step, end_step+1):    
     step = -1
@@ -105,7 +107,7 @@ for epoch in range(start_step, end_step+1):
         gt_data = blob['gt_density']
         density_map = net(im_data, gt_data)
         loss = net.loss
-        train_loss += loss.data[0]
+        train_loss += loss.item()
         step_cnt += 1
         optimizer.zero_grad()
         loss.backward()
