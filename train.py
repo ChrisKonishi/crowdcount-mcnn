@@ -1,3 +1,4 @@
+import argparse
 import os
 import torch
 import numpy as np
@@ -27,16 +28,19 @@ def log_print(text, color=None, on_color=None, attrs=None):
     else:
         print(text)
 
-
+parser = argparse.ArgumentParser(description='MCNN args')
+parser.add_argument('--part', help="Part A or B", choices=["A", "B"], required=True)
+parser.add_argument('--output-dir', default='./saved_models/')
+args = parser.parse_args()
 
 method = 'mcnn'
-dataset_name = 'shtechA'
-output_dir = './saved_models/'
+dataset_name = 'shtech{}'.format(args.part)
+output_dir = args.output_dir
 
-train_path = './data/formatted_trainval/shanghaitech_part_A_patches_9/train'
-train_gt_path = './data/formatted_trainval/shanghaitech_part_A_patches_9/train_den'
-val_path = './data/formatted_trainval/shanghaitech_part_A_patches_9/val'
-val_gt_path = './data/formatted_trainval/shanghaitech_part_A_patches_9/val_den'
+train_path = './data/formatted_trainval/shanghaitech_part_{}_patches_9/train'.format(args.part)
+train_gt_path = './data/formatted_trainval/shanghaitech_part_{}_patches_9/train_den'.format(args.part)
+val_path = './data/formatted_trainval/shanghaitech_part_{}_patches_9/val'.format(args.part)
+val_gt_path = './data/formatted_trainval/shanghaitech_part_{}_patches_9/val_den'.format(args.part)
 
 #training configuration
 # MARK parameters
