@@ -1,3 +1,4 @@
+import argparse
 import os
 import torch
 import numpy as np
@@ -13,9 +14,14 @@ torch.backends.cudnn.benchmark = False
 vis = False
 save_output = True
 
-data_path =  './data/original/shanghaitech/part_B_final/test_data/images/'
-gt_path = './data/original/shanghaitech/part_B_final/test_data/ground_truth_csv/'
-model_path = './final_models/mcnn_shtechB_110.h5'
+parser = argparse.ArgumentParser(description='MCNN args')
+parser.add_argument('--part', help="Part A or B", choices=["A", "B"], required=True)
+parser.add_argument('--model-path', required=True)
+args = parser.parse_args()
+
+data_path =  './data/original/shanghaitech/part_{}_final/test_data/images/'.format(args.part)
+gt_path = './data/original/shanghaitech/part_{}_final/test_data/ground_truth_csv/'.format(args.part)
+model_path = args.model_path
 
 output_dir = './output/'
 model_name = os.path.basename(model_path).split('.')[0]
